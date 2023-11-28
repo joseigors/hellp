@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hellp/pages/CadPage.dart';
+import 'package:hellp/pages/HomePage.dart';
 import 'package:hellp/pages/LoginPage.dart';
 import 'package:hellp/pages/initPage.dart';
 
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/init': (context) => InitPage(),
         '/cadastro': (context) => CadastroPage(),
-        '/login': (context)=> LoginPage()
+        '/login': (context)=> LoginPage(),
+        '/home': (context)=> HomePage(),
       },
     );
   }
