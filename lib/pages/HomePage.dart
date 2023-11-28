@@ -1,4 +1,4 @@
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,6 +11,43 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+final audioPlayer = AudioPlayer();
+bool isPlaying = false;
+Duration duration = Duration.zero;
+Duration position = Duration.zero;
+
+@override
+void initState(){
+  super.initState();
+
+  setAudio();
+  audioPlayer.onPlayerStateChanged.listen((state) {
+    setState(() {
+      isPlaying = state == PlayerState.playing;
+    });
+  });
+  audioPlayer.onDurationChanged.listen((newDuration) {
+    setState(() {
+      duration = newDuration;
+    });
+  });
+  audioPlayer.onPositionChanged.listen((newPosition) {
+    setState(() {
+      duration = newPosition;
+    });
+  });
+}
+
+Future setAudio() async{
+
+}
+
+@override
+void dispose(){
+  audioPlayer.dispose();
+  super.dispose();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +64,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Positioned(
-            top: 100,
+            top: 90,
             left: 20,
             right: 20,
             child: Column(
@@ -112,13 +149,72 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: 16),
                 Container(
+                  decoration: BoxDecoration(gradient:  LinearGradient(
+                      colors: [Colors.lightBlueAccent, Colors.white70],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,),
+                  borderRadius: BorderRadius.circular(16)),
                   width: double.infinity,
-                  height: 150,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50.0),
-                      image: DecorationImage(
-                          image: AssetImage('lib/assets/image/PLAYER.jpg')
-                      )
+                  height: 200,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'The flutter song'
+                        ),
+                        SizedBox(height: 4),
+                        const Text(
+                            'Sarah Abs'
+                        ),
+                        Slider(
+                          activeColor: Colors.lightBlueAccent,
+                          min: 0,
+                          max: duration.inSeconds.toDouble(),
+                          value: position.inSeconds.toDouble(),
+                          onChanged: (value) async {
+                            final position = Duration(seconds: value.toInt());
+                            await audioPlayer.seek(position);
+
+                            await audioPlayer.resume();
+                          },
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('00:00'),
+                              Text('04:33'),
+
+                              //Text(formatTime(position)),
+                              //Text(formatTime(duration - position)),
+                            ],
+                          ),
+                        ),
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundColor: Colors.lightBlueAccent,
+                          child: IconButton(
+                            icon: Icon(
+                              isPlaying ? Icons.pause : Icons.play_arrow
+                            ),
+                            iconSize: 50,
+                            color: Colors.white,
+                            onPressed: () async {
+                              if(isPlaying){
+                                await audioPlayer.pause();
+                              }else{
+                                String url =
+                                'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+                                await audioPlayer.play(url as Source);
+                              }
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
 
                 ),
@@ -159,7 +255,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _launchPhoneDialer();
+         _makePhoneCall('79988213744');
         },
         child: Icon(Icons.warning_sharp),
         backgroundColor: Colors.red,
@@ -171,12 +267,11 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-void _launchPhoneDialer() async{
-  const url = "tel:86994324465";
-  if (await canLaunchUrl(Uri.parse(url))) {
-    await launchUrl(Uri.parse(url));
-  } else {
-    throw 'Could not launch $url';
-  }
+Future<void> _makePhoneCall(String phoneNumber) async {
+  final Uri launchUri = Uri(
+    scheme: 'tel',
+    path: phoneNumber,
+  );
+  await launchUrl(launchUri);
 }
 
