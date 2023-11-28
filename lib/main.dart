@@ -3,6 +3,7 @@ import 'package:hellp/pages/CadPage.dart';
 import 'package:hellp/pages/HomePage.dart';
 import 'package:hellp/pages/LoginPage.dart';
 import 'package:hellp/pages/initPage.dart';
+import 'package:hellp/pages/profilePage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
         '/cadastro': (context) => CadastroPage(),
         '/login': (context)=> LoginPage(),
         '/home': (context)=> HomePage(),
+        '/perfil': (context)=> profilePage()
       },
     );
   }

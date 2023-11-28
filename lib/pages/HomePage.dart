@@ -236,11 +236,14 @@ void dispose(){
                     icon: Icon(Icons.home),
                   ),
                   IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.favorite),
+                    onPressed: () {
+                    },
+                    icon: Icon(Icons.calendar_today),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/perfil');
+                    },
                     icon: Icon(Icons.person),
                   ),
                   IconButton(
