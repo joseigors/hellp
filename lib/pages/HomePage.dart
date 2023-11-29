@@ -207,8 +207,8 @@ void dispose(){
                                 await audioPlayer.pause();
                               }else{
                                 String url =
-                                'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-                                await audioPlayer.play(url as Source);
+                                'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' ;
+                                await audioPlayer.play(UrlSource(url));
                               }
                             },
                           ),
@@ -256,14 +256,28 @@ void dispose(){
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-         _makePhoneCall('79988213744');
-        },
-        child: Icon(Icons.warning_sharp),
-        backgroundColor: Colors.red,
+
+      floatingActionButton: Column(
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+             _makePhoneCall('79988213744');
+            },
+            child: Icon(Icons.warning_sharp),
+            backgroundColor: Colors.red,
+          ),
+          SizedBox(height: 8),
+
+          FloatingActionButton(
+              onPressed: (){
+                Navigator.pushNamed(context, '/perfil');
+    },
+            child: Icon(Icons.calculate_outlined),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+
     );
 
 
