@@ -1,7 +1,10 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hellp/widgets/imc_calculator.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../widgets/music_player.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -185,8 +188,8 @@ void dispose(){
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('00:00'),
-                              Text('04:33'),
+                              Text('${formatTime(position)}'),
+                              Text('${formatTime(duration)}'),
 
                               //Text(formatTime(position)),
                               //Text(formatTime(duration - position)),
@@ -227,7 +230,7 @@ void dispose(){
             right: 0,
             child: Container(
               height: 60,
-              
+
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -247,8 +250,10 @@ void dispose(){
                     icon: Icon(Icons.person),
                   ),
                   IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/player');
+                    },
+                    icon: Icon(Icons.play_arrow),
                   ),
                 ],
               ),
@@ -270,10 +275,18 @@ void dispose(){
 
           FloatingActionButton(
               onPressed: (){
-                Navigator.pushNamed(context, '/perfil');
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context){
+                      return Dialog(
+                        child: ImcCalculator(),
+                      );
+                    }
+
+                );
     },
             child: Icon(Icons.calculate_outlined),
-          ),
+          )
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
@@ -291,4 +304,8 @@ Future<void> _makePhoneCall(String phoneNumber) async {
   );
   await launchUrl(launchUri);
 }
-
+String formatTime(Duration duration) {
+  int minutes = duration.inMinutes;
+  int seconds = duration.inSeconds % 60;
+  return '$minutes:${seconds.toString().padLeft(2, '0')}';
+}

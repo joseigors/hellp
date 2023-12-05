@@ -66,6 +66,7 @@ flutter:
      - lib/assets/image/PrimeiroContainer.jpg
      - lib/assets/image/SegundoContainer.jpg
      - lib/assets/image/PLAYER.jpg
+     - lib/assets/image/AlbumCover.jpg
 
 
 
